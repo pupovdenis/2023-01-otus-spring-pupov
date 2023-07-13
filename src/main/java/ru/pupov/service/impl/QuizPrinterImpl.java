@@ -1,9 +1,14 @@
 package ru.pupov.service.impl;
 
+import org.springframework.beans.factory.annotation.Value;
 import ru.pupov.domain.Question;
+import ru.pupov.domain.Student;
 import ru.pupov.service.QuizPrinter;
 
 public class QuizPrinterImpl implements QuizPrinter {
+
+    @Value("${passing-number-of-correct-answers}")
+    private int PASSING_NUMBER_OF_CORRECT_ANSWERS;
 
     @Override
     public void printQuestion(Question question) {
@@ -21,8 +26,9 @@ public class QuizPrinterImpl implements QuizPrinter {
     }
 
     @Override
-    public void printEnd(int rightAnswersCounter) {
+    public void printEnd(Student student, int rightAnswersCounter) {
         System.out.println("---------------------------------------------------");
-        System.out.println("You got " + rightAnswersCounter + " correct answers");
+        System.out.printf("%s, you got %d correct answers. ", student, rightAnswersCounter);
+        System.out.printf("You %spassed the test\n\n", rightAnswersCounter < PASSING_NUMBER_OF_CORRECT_ANSWERS ? "did not " : "");
     }
 }

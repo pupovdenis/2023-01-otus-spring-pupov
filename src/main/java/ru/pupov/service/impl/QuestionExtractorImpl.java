@@ -15,7 +15,6 @@ public class QuestionExtractorImpl implements QuestionExtractor {
 
     public static final String CSV_DELIMITER = ";";
 
-
     @Override
     public List<Question> extract(String filePath) {
         var classloader = Thread.currentThread().getContextClassLoader();

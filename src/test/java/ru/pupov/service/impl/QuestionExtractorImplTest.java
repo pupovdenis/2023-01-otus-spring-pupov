@@ -3,9 +3,7 @@ package ru.pupov.service.impl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 @DisplayName("QuestionExtractorImpl класс")
@@ -16,11 +14,11 @@ class QuestionExtractorImplTest {
     void shouldExtractCorrectQuestions() {
         var questionExtractor = new QuestionExtractorImpl();
         var list = questionExtractor.extract("data.csv");
-        assertEquals(list.size(), 5);
-        list.forEach(question -> {
-            assertFalse(question.getQuestion().isBlank());
-            assertFalse(question.getAnswers().isEmpty());
-            assertTrue(question.getCorrectAnswerNum() >= 0);
-        });
+        assertThat(list)
+                .filteredOn(question ->
+                        !question.getQuestion().isBlank()
+                        && !question.getAnswers().isEmpty()
+                        && question.getCorrectAnswerNum() >= 0)
+                .hasSize(5);
     }
 }
