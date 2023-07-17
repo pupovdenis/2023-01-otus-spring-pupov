@@ -1,37 +1,55 @@
 package ru.pupov.service.impl;
 
-import ru.pupov.service.QuestionExtractor;
-import ru.pupov.service.QuizPrinter;
+import ru.pupov.dao.QuestionDao;
+import ru.pupov.domain.Question;
+import ru.pupov.service.IOService;
 import ru.pupov.service.QuizService;
 
-import java.util.Scanner;
+import java.util.List;
 
 public class QuizServiceImpl implements QuizService {
 
-    private final String CSV_PATH;
+    private static final String START_MESSAGE = "\n\nLet's start a quiz!";
+    private static final String END_MESSAGE = "You got correct answers: ";
+    private static final String SEPARATOR_LINE = "---------------------------------------------------";
+    private static final String EMPTY_QUESTIONS_MESSAGE = "Failed to get any question";
+    private static final String ENTER_YOUR_ANSWER_MESSAGE = "Enter your answer: ";
 
-    private final QuizPrinter quizPrinter;
-    private final QuestionExtractor questionExtractor;
+    private final IOService ioService;
+    private final QuestionDao questionDao;
 
-    public QuizServiceImpl(QuizPrinter quizPrinter, QuestionExtractor questionExtractor, String csvPath) {
-        this.quizPrinter = quizPrinter;
-        this.questionExtractor = questionExtractor;
-        CSV_PATH = csvPath;
+    public QuizServiceImpl(IOService ioService, QuestionDao questionDao) {
+        this.ioService = ioService;
+        this.questionDao = questionDao;
     }
 
-    @Override
     public void run() {
-        var questions = questionExtractor.extract(CSV_PATH);
-        int rightAnswersCounter = -1;
-        var scanner = new Scanner(System.in);
-        quizPrinter.printStart();
-        for (var q : questions) {
-            quizPrinter.printQuestion(q);
-            var answer = scanner.nextInt();
-            if (answer - 1 == q.getCorrectAnswerNum()) {
+        var questionList = questionDao.getAll();
+        if (questionList.isEmpty()) {
+            ioService.outputString(EMPTY_QUESTIONS_MESSAGE);
+        }
+        ioService.outputString(START_MESSAGE);
+        int rightAnswersCounter = doQuizAndGetResult(questionList);
+        ioService.outputString(SEPARATOR_LINE);
+        ioService.outputString(END_MESSAGE + rightAnswersCounter);
+    }
+
+    private int doQuizAndGetResult(List<Question> questionList) {
+        int rightAnswersCounter = 0;
+        for (var question : questionList) {
+            ioService.outputString(question.toQuizString(), true);
+            var answer = ioService.readIntWithPrompt(ENTER_YOUR_ANSWER_MESSAGE);
+            if (isCorrectAnswerInput(question, answer)) {
                 rightAnswersCounter++;
             }
         }
-        quizPrinter.printEnd(rightAnswersCounter);
+        return rightAnswersCounter;
+    }
+
+    private boolean isCorrectAnswerInput(Question question, int answer) {
+        int answerIndex = answer - 1;
+        return answerIndex >= 0
+                && answerIndex < question.getAnswers().size()
+                && question.getAnswers().get(answerIndex).equals(question.getCorrectAnswer());
     }
 }
