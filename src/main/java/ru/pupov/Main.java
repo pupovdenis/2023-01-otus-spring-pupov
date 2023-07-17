@@ -3,8 +3,6 @@ package ru.pupov;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.pupov.service.QuizService;
 
-import java.io.IOException;
-
 public class Main {
 
 

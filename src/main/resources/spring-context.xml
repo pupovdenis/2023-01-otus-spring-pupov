@@ -3,12 +3,13 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="quizPrinter" class="ru.pupov.service.impl.QuizPrinterImpl"/>
-    <bean id="questionExtractor" class="ru.pupov.service.impl.QuestionExtractorImpl"/>
+    <bean id="questionDao" class="ru.pupov.dao.QuestionDao">
+        <constructor-arg name="csvPath" value="data.csv" type="java.lang.String"/>
+    </bean>
+    <bean id="ioService" class="ru.pupov.service.impl.ConsoleIOService"/>
 
     <bean id="quizService" class="ru.pupov.service.impl.QuizServiceImpl">
-        <constructor-arg name="quizPrinter" ref="quizPrinter"/>
-        <constructor-arg name="questionExtractor" ref="questionExtractor"/>
-        <constructor-arg name="csvPath" value="data.csv" type="java.lang.String"/>
+        <constructor-arg name="ioService" ref="ioService"/>
+        <constructor-arg name="questionDao" ref="questionDao"/>
     </bean>
 </beans>
