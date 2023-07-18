@@ -1,10 +1,12 @@
 package ru.pupov.service.impl;
 
+import org.springframework.stereotype.Service;
 import ru.pupov.service.IOService;
 
 import java.io.PrintStream;
 import java.util.Scanner;
 
+@Service
 public class ConsoleIOService implements IOService {
 
     private final Scanner userInput;
@@ -33,5 +35,11 @@ public class ConsoleIOService implements IOService {
     public int readIntWithPrompt(String prompt) {
         outputString(prompt, true);
         return Integer.parseInt(userInput.nextLine());
+    }
+
+    @Override
+    public String readStringWithPrompt(String prompt, boolean notNewLine) {
+        outputString(prompt, notNewLine);
+        return userInput.nextLine();
     }
 }
