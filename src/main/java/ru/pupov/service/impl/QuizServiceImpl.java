@@ -1,5 +1,6 @@
 package ru.pupov.service.impl;
 
+import ru.pupov.converter.Converter;
 import ru.pupov.dao.QuestionDao;
 import ru.pupov.domain.Question;
 import ru.pupov.service.IOService;
@@ -27,6 +28,7 @@ public class QuizServiceImpl implements QuizService {
         var questionList = questionDao.getAll();
         if (questionList.isEmpty()) {
             ioService.outputString(EMPTY_QUESTIONS_MESSAGE);
+            return;
         }
         ioService.outputString(START_MESSAGE);
         int rightAnswersCounter = doQuizAndGetResult(questionList);
@@ -37,9 +39,9 @@ public class QuizServiceImpl implements QuizService {
     private int doQuizAndGetResult(List<Question> questionList) {
         int rightAnswersCounter = 0;
         for (var question : questionList) {
-            ioService.outputString(question.toQuizString(), true);
-            var answer = ioService.readIntWithPrompt(ENTER_YOUR_ANSWER_MESSAGE);
-            if (isCorrectAnswerInput(question, answer)) {
+            ioService.outputString(Converter.toQuizString(question), true);
+            var answerInt = ioService.readIntWithPrompt(ENTER_YOUR_ANSWER_MESSAGE);
+            if (isCorrectAnswerInput(question, answerInt)) {
                 rightAnswersCounter++;
             }
         }
@@ -50,6 +52,6 @@ public class QuizServiceImpl implements QuizService {
         int answerIndex = answer - 1;
         return answerIndex >= 0
                 && answerIndex < question.getAnswers().size()
-                && question.getAnswers().get(answerIndex).equals(question.getCorrectAnswer());
+                && question.getAnswers().get(answerIndex).isCorrectAnswer();
     }
 }
