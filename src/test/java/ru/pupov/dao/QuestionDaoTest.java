@@ -2,11 +2,11 @@ package ru.pupov.dao;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import ru.pupov.domain.Question;
+import ru.pupov.domain.Answer;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("Класс QuestionDao")
 class QuestionDaoTest {
@@ -22,7 +22,9 @@ class QuestionDaoTest {
         questions.forEach(question -> {
             assertFalse(question.getQuestion().isBlank());
             assertFalse(question.getAnswers().isEmpty());
-            assertFalse(question.getCorrectAnswer().isBlank());
+            assertEquals(1, question.getAnswers().stream()
+                    .filter(Answer::isCorrectAnswer)
+                    .toList().size());
         });
     }
 }

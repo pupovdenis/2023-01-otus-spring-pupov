@@ -7,9 +7,11 @@
         <constructor-arg name="csvPath" value="data.csv" type="java.lang.String"/>
     </bean>
     <bean id="ioService" class="ru.pupov.service.impl.ConsoleIOService"/>
+    <bean id="questionConverter" class="ru.pupov.converter.impl.QuestionConverterImpl"/>
 
     <bean id="quizService" class="ru.pupov.service.impl.QuizServiceImpl">
         <constructor-arg name="ioService" ref="ioService"/>
         <constructor-arg name="questionDao" ref="questionDao"/>
+        <constructor-arg name="questionConverter" ref="questionConverter"/>
     </bean>
 </beans>

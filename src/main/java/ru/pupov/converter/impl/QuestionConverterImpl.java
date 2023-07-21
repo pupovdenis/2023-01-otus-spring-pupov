@@ -1,18 +1,17 @@
-package ru.pupov.converter;
+package ru.pupov.converter.impl;
 
+import ru.pupov.converter.QuestionConverter;
 import ru.pupov.domain.Question;
 
-public class Converter {
+public class QuestionConverterImpl implements QuestionConverter {
 
-    private Converter() {
-    }
-
-    public static String toQuizString(Question question) {
+    @Override
+    public String toQuizString(Question question) {
         var answers = question.getAnswers();
         var stringBuilder = new StringBuilder();
         stringBuilder
                 .append("\n")
-                .append(question)
+                .append(question.getQuestion())
                 .append("\n");
         for (int i = 0; i < answers.size(); i++) {
             stringBuilder
