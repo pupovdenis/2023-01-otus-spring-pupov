@@ -20,5 +20,4 @@ public class Question {
         return answers;
     }
 
-
 }

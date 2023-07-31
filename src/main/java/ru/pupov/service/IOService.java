@@ -7,4 +7,6 @@ public interface IOService {
     void outputString(String s, boolean notNewLine);
 
     int readIntWithPrompt(String prompt);
+
+    String readStringWithPrompt(String prompt, boolean notNewLine);
 }

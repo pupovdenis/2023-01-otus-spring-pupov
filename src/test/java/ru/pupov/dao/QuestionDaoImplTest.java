@@ -6,17 +6,16 @@ import ru.pupov.domain.Answer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@DisplayName("Класс QuestionDao")
-class QuestionDaoTest {
+@DisplayName("Класс QuestionDaoImpl")
+class QuestionDaoImplTest {
 
     public static final String CSV_PATH = "data.csv";
 
     @DisplayName("Корректно извлекает данные")
     @Test
     void shouldExtractCorrectQuestions() {
-        var questionDao = new QuestionDao(CSV_PATH);
+        var questionDao = new QuestionDaoImpl(CSV_PATH);
         var questions = questionDao.getAll();
         assertEquals(questions.size(), 5);
         questions.forEach(question -> {

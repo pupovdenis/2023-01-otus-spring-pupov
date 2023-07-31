@@ -1,8 +1,10 @@
 package ru.pupov.converter.impl;
 
+import org.springframework.stereotype.Component;
 import ru.pupov.converter.QuestionConverter;
 import ru.pupov.domain.Question;
 
+@Component
 public class QuestionConverterImpl implements QuestionConverter {
 
     @Override
